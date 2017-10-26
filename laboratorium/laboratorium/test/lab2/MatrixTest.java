@@ -1,66 +1,67 @@
 package lab2;
 
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MatrixTest {
-    @org.junit.Test
+    @Test
     public void getRows() throws Exception {
-        ooo
     }
 
-    @org.junit.Test
+    @Test
     public void getCols() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void get() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void set() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void asArray() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void testToString() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void reshape() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void shape() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void add() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void sub() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void mul() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void div() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void dot() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void frobenius() throws Exception {
     }
 
-    @org.junit.Test
+    @Test
     public void main() throws Exception {
     }
 
