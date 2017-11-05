@@ -1,3 +1,5 @@
+package matrix;
+
 public class Matrix {
     double[]data;
     int rows;

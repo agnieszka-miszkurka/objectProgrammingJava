@@ -1,4 +1,4 @@
-package lab1;
+package zad2;
 
 import java.util.Locale;
 import java.util.Scanner;
