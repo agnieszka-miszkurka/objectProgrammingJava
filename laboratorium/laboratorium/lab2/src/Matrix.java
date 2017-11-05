@@ -1,5 +1,3 @@
-package lab2;
-
 public class Matrix {
     double[]data;
     int rows;
