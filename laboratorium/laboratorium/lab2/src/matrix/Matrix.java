@@ -160,17 +160,16 @@ public class Matrix {
 
     //////// GRUPA A /////////
     Matrix getColumn(int i) throws RuntimeException{
-        if(i>getCols())
+        if(i>=getCols())
             throw new RuntimeException("nie ma takiej kolumny");
 
-        double[][] d = new double[rows][1];
+        Matrix r = new Matrix(rows,1);
 
         for (int j = 0; j < rows; j++) {
-            d[j][0] = get(j, i);
+            r.set(j, 0, get(j, i));
         }
-        Matrix result = new Matrix(d);
 
-        return result;
+        return r;
     }
 
 
