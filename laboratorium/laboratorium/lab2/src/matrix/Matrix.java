@@ -158,6 +158,24 @@ public class Matrix {
         return result;
     }
 
+    //////// GRUPA A /////////
+    Matrix getColumn(int i) throws RuntimeException{
+        if(i>getCols())
+            throw new RuntimeException("nie ma takiej kolumny");
+
+        double[][] d = new double[rows][1];
+
+        for (int j = 0; j < rows; j++) {
+            d[j][0] = get(j, i);
+        }
+        Matrix result = new Matrix(d);
+
+        return result;
+    }
+
+
+/////////////////////////
+
 
     public static void main(String[] args) {
         double [][] d = {{1,2,3,4},{5,6},{7,8,9}};
@@ -169,6 +187,13 @@ public class Matrix {
         System.out.println(M.toString());
         Matrix K = M.add(N);
         System.out.println(K.toString());
+        Matrix m = new Matrix(new double[][]{{1,2,3},{4,5,6},{7,8,9}});
+        Matrix col = m.getColumn(0);
+        System.out.println("...");
+        System.out.println(col.toString());
+        col = K.getColumn(2);
+        System.out.println(col.toString());
     }
 
 }
+
