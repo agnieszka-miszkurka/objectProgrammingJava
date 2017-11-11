@@ -28,8 +28,17 @@ public class Section {
         return this;
     }
 
+    Section addParagraph(ParagraphWithList p){
+        paragraphs.add(p);
+        return this;
+    }
+
     void writeHTML(PrintStream out){
+        if (paragraphs.isEmpty())
+            return;
+
         out.printf("<section>");
+        out.printf("\n<h2> %s </h2>\n",title);
         for (Paragraph p : paragraphs) {
             p.writeHTML(out);
         }

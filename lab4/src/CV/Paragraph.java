@@ -8,12 +8,14 @@ public class Paragraph {
         this.content = text;
     }
 
+    Paragraph(){ }
     Paragraph setContent(String newContent) {
         content = newContent;
         return this;
     }
 
     void writeHTML(PrintStream out){
-        out.printf("<p>" + content + "</p>\n");
+        out.printf("<p>\n" + content + "\n</p>\n");
     }
+
 }

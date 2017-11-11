@@ -18,7 +18,7 @@ public class Document {
         return this;
     }
 
-    Document setPhoto(String photoUrl){
+    Document addPhoto(String photoUrl){
         photo = new Photo(photoUrl);
         return this;
     }
@@ -41,10 +41,21 @@ public class Document {
         // zapisz niezbędne znaczniki HTML
         // dodaj tytuł i obrazek
         // dla każdej sekcji wywołaj section.writeHTML(out)
-        out.printf("<h1> %s </h1>",title);
+        out.printf("<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "<head>\n" +
+                "    <meta charset=\"UTF-8\">\n" +
+                "    <title> %s</title>\n" +
+                "</head>\n" +
+                "<body>\n", title);
+
+        out.printf("<h1> %s </h1>\n",title);
         photo.writeHTML(out);
         for (Section s : sections) {
             s.writeHTML(out);
         }
+
+        out.printf("</body>\n" +
+                "</html>");
     }
 }

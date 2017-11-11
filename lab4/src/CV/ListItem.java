@@ -10,6 +10,6 @@ public class ListItem {
     }
 
     void writeHTML(PrintStream out) {
-        out.printf("%s \n", content);
+        out.printf("<li>%s</li>\n", content);
     }
 }
