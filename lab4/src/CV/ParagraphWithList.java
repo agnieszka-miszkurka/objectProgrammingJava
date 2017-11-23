@@ -1,9 +1,11 @@
 package CV;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.io.PrintStream;
 
 public class ParagraphWithList extends Paragraph {
 
+    @XmlElement
     UnorderedList unorderedList;
 
     public ParagraphWithList(){

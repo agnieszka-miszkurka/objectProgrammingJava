@@ -1,10 +1,12 @@
 package CV;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UnorderedList {
+    @XmlElement
     List<ListItem> list;
 
     UnorderedList(){

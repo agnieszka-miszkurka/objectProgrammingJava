@@ -1,11 +1,21 @@
 package CV;
 
+import javax.xml.bind.annotation.XmlElement;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElements;
+
 
 public class Section {
+    @XmlAttribute
     String title;
+
+    @XmlElements(value= {
+            @XmlElement(name = "paragraph", type = Paragraph.class),
+            @XmlElement(name = "paragraph-with-list", type = ParagraphWithList.class)
+    })
     List<Paragraph> paragraphs = new ArrayList<>() ;
 
     Section(String title){

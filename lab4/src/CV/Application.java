@@ -22,6 +22,10 @@ public class Application {
                 );
 
 
+        cv.write("cv.xml");
+        //Document cv2 = Document.read("cv.xml");
+        //cv2.writeHTML(System.out);
+
         try {
             //PrintWriter writer = new PrintWriter("cv.html", "UTF-8");
 

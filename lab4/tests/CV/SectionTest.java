@@ -25,6 +25,7 @@ public class SectionTest {
         assertTrue(result.contains("</section>"));
         assertTrue(result.contains("</h2>"));
         assertTrue(result.contains("<h2>"));
+        assertTrue(result.contains("bla bla"));
         assertTrue(result.contains(title));
     }
 
