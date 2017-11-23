@@ -79,6 +79,43 @@ public class MatrixTest {
         fail("wyjatek nieprzechwycony!");
     }
 
+    //////// GRUPA A /////////
+
+    @org.junit.Test
+    public void getColumn() throws Exception {
+        int m = (int)(Math.random()*10)+1;    //wymiary macierzy: od 1 do 10
+        int n =(int)(Math.random()*10)+1;
+        Matrix mat = new Matrix(m,n);
+
+        for(int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                mat.set(i,j,Math.random()*10);
+            }
+        }
+
+        for(int c=-1; c<n+1; c++) {
+            try {
+                Matrix colc = mat.getColumn(c);
+
+                if(c<0 || c>=n) {
+                    fail("wyjatek nieprzechwycony!");
+                }
+
+                for(int r=0; r<m; r++) {
+                    assertEquals(colc.get(r, 0), mat.get(r,c), 0.0);
+                }
+
+            } catch (RuntimeException e) {
+                if (c>=0 && c<n) {
+                    fail("wyjatek przechwycony w zlym miejscu!");
+                }
+            }
+        }
+
+    }
+
+    /////////////////////////
+
     @org.junit.Test
     public void shape() throws Exception {
     }

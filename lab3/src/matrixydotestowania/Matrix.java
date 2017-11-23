@@ -158,6 +158,23 @@ public class Matrix {
         return result;
     }
 
+    //////// GRUPA A /////////
+    Matrix getColumn(int i) throws RuntimeException{
+        if(i>=getCols())
+            throw new RuntimeException("nie ma takiej kolumny");
+
+        Matrix r = new Matrix(rows,1);
+
+        for (int j = 0; j < rows; j++) {
+            r.set(j, 0, get(j, i));
+        }
+
+        return r;
+    }
+
+
+/////////////////////////
+
 
     public static void main(String[] args) {
         double [][] d = {{1,2,3,4},{5,6},{7,8,9}};
@@ -169,6 +186,31 @@ public class Matrix {
         System.out.println(M.toString());
         Matrix K = M.add(N);
         System.out.println(K.toString());
+
+        int m = (int)(Math.random()*10);
+        int n =(int)(Math.random()*10);
+        Matrix mat = new Matrix(m,n);
+        System.out.println("rows:" +m);
+        System.out.println("cols:" +n);
+
+        for(int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                mat.set(i,j,Math.random()*10);
+            }
+        }
+
+        System.out.println(mat.toString());
+        for(int c=-1; c<n+1; c++) {
+            try {
+                Matrix colc = mat.getColumn(c);
+                for(int r=0; r<m; r++) {
+                    System.out.println("ok");
+                }
+            } catch (RuntimeException e) {
+                System.out.println("przechwycono wyjatek");
+
+            }
+        }
     }
 
 }
