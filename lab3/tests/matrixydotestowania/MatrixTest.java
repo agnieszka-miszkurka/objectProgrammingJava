@@ -109,6 +109,7 @@ public class MatrixTest {
                 if (c>=0 && c<n) {
                     fail("wyjatek przechwycony w zlym miejscu!");
                 }
+
             }
         }
 
