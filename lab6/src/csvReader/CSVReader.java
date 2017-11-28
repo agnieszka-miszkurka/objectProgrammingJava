@@ -66,31 +66,31 @@ public class CSVReader {
     long getLong(int index) throws EmptyFieldException {
         if(isMissing(index))
             throw(new EmptyFieldException());
-        return Long.parseLong(current[columnLabelsToInt.get(index)]);
+        return Long.parseLong(current[index]);
     }
 
     public int getInt(int index) throws EmptyFieldException {
         if(isMissing(index))
             throw(new EmptyFieldException());
-        return Integer.parseInt(current[columnLabelsToInt.get(index)]);
+        return Integer.parseInt(current[index]);
     }
 
     public String get(int index) {
-        return isMissing(index) ? "" : current[columnLabelsToInt.get(index)];
+        return isMissing(index) ? "" : current[index];
     }
 
     public double getDouble(int index) throws EmptyFieldException {
         if(isMissing(index))
             throw(new EmptyFieldException());
-        return Double.parseDouble(current[columnLabelsToInt.get(index)]);
+        return Double.parseDouble(current[index]);
     }
 
 
     boolean next() throws IOException {
         // czyta następny wiersz, dzieli na elementy i przypisuje do current
         //
-        String line = reader.readLine();
 
+        String line = reader.readLine();
         if (line == null)
             return false;
         else {
@@ -129,24 +129,21 @@ public class CSVReader {
     }
 
     public static void main(String[] args) throws IOException {
-        CSVReader reader = new CSVReader("no-header.csv",";",true);
+        CSVReader reader = new CSVReader("accelerator.csv",";",true);
+        reader.columnLabelsToInt.get(1);
+        System.out.println(reader.columnLabelsToInt.get(7));
         while(reader.next()){
+            System.out.println("o");
             int id = 0;
             double fare = 0.0;
             try {
-                id = reader.getInt(7);
+                //id = reader.getInt(0);
                 fare = reader.getDouble(2);
             } catch (EmptyFieldException e) {
                 e.printStackTrace();
             }
             String name = reader.get(6);
-
-
             System.out.printf(Locale.US,"%d %s %f",id, name, fare);
        }
-
-
-    File f = new File("accelerator.csv");
-        System.out.println(f.getAbsolutePath());
     }
 }
