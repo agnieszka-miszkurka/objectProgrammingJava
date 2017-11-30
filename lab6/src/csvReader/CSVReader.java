@@ -34,44 +34,46 @@ public class CSVReader {
     }
 
     boolean isMissing(int columnIndex){
-        return !columnLabelsToInt.containsValue(columnIndex);
+        return current.length<=columnIndex || current[columnIndex].equals("") ;
     }
 
     boolean isMissing(String column){
-        return !columnLabelsToInt.containsKey(column);
+        int col_num = columnLabelsToInt.get(column);
+        return current.length<=col_num || current[col_num].equals("") ;
     }
 
-    public int getInt(String element) throws EmptyFieldException {
+    public int getInt(String element) {
         if(isMissing(element))
-            throw(new EmptyFieldException());
+            return -1;
         return Integer.parseInt(current[columnLabelsToInt.get(element)]);
     }
 
     public String get(String element){
+
         return isMissing(element) ? "" :  current[columnLabelsToInt.get(element)];
     }
 
-    public double getDouble(String element) throws EmptyFieldException {
+    public double getDouble(String element) {
         if(isMissing(element))
-            throw(new EmptyFieldException());
+            return -1;
         return Double.parseDouble(current[columnLabelsToInt.get(element)]);
     }
 
-    long getLong(String element) throws EmptyFieldException {
+    long getLong(String element) {
         if(isMissing(element))
-            throw(new EmptyFieldException());
+            return -1;
         return Long.parseLong(current[columnLabelsToInt.get(element)]);
     }
 
-    long getLong(int index) throws EmptyFieldException {
+    long getLong(int index){
         if(isMissing(index))
-            throw(new EmptyFieldException());
+            return -1;
         return Long.parseLong(current[index]);
     }
 
-    public int getInt(int index) throws EmptyFieldException {
+    public int getInt(int index)  {
         if(isMissing(index))
-            throw(new EmptyFieldException());
+            return -1;
         return Integer.parseInt(current[index]);
     }
 
@@ -79,14 +81,14 @@ public class CSVReader {
         return isMissing(index) ? "" : current[index];
     }
 
-    public double getDouble(int index) throws EmptyFieldException {
+    public double getDouble(int index) {
         if(isMissing(index))
-            throw(new EmptyFieldException());
+            return -1;
         return Double.parseDouble(current[index]);
     }
 
 
-    boolean next() throws IOException {
+    public boolean next() throws IOException {
         // czyta następny wiersz, dzieli na elementy i przypisuje do current
         //
 
@@ -129,21 +131,20 @@ public class CSVReader {
     }
 
     public static void main(String[] args) throws IOException {
-        CSVReader reader = new CSVReader("accelerator.csv",";",true);
+        CSVReader reader = new CSVReader("admin-units.csv",",",true);
         reader.columnLabelsToInt.get(1);
         System.out.println(reader.columnLabelsToInt.get(7));
         while(reader.next()){
-            System.out.println("o");
             int id = 0;
             double fare = 0.0;
-            try {
-                //id = reader.getInt(0);
-                fare = reader.getDouble(2);
-            } catch (EmptyFieldException e) {
-                e.printStackTrace();
-            }
-            String name = reader.get(6);
-            System.out.printf(Locale.US,"%d %s %f",id, name, fare);
+            String name = "";
+
+                id = reader.getInt("id");
+                fare = reader.getDouble("area");
+                name = reader.get("name");
+
+
+            System.out.printf(Locale.US,"%d %s %f\n",id, name, fare);
        }
     }
 }
