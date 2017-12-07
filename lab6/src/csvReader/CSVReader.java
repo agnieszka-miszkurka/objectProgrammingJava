@@ -59,13 +59,13 @@ public class CSVReader {
         return Double.parseDouble(current[columnLabelsToInt.get(element)]);
     }
 
-    long getLong(String element) {
+    public long getLong(String element) {
         if(isMissing(element))
             return -1;
         return Long.parseLong(current[columnLabelsToInt.get(element)]);
     }
 
-    long getLong(int index){
+    public long getLong(int index){
         if(isMissing(index))
             return -1;
         return Long.parseLong(current[index]);

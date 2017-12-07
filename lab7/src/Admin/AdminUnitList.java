@@ -2,35 +2,67 @@ package Admin;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import Admin.AdminUnit;
 import csvReader.CSVReader;
 import csvReader.EmptyFieldException;
 
 public class AdminUnitList {
-    List<AdminUnit> units = new ArrayList<>();
+    public List<AdminUnit> getUnits() {
+        return units;
+    }
 
-    public void read(String filename) throws IOException {
-        CSVReader reader = new CSVReader(filename,",",true);
-        while(reader.next()){
-            int adminLevel = 0;
-            String name = "";
-            double population=0.0;
-            double area=0.0;
-            double density=0.0;
-            adminLevel = reader.getInt("admin_level");
-            population = reader.getDouble("population");
+    private List<AdminUnit> units = new ArrayList<>();
+    private Map<AdminUnit,Long> parentIdMap = new HashMap<>();
+    private Map<Long, AdminUnit> selfIdMap = new HashMap<>();
+
+    private Map<Long,List<AdminUnit>> parentid2child = new HashMap<>();
+
+    public Map<Long, List<AdminUnit>> getParentid2child() {
+        return parentid2child;
+    }
+
+    void read(String filename) throws IOException {
+        CSVReader reader = new CSVReader(filename);
+        while (reader.next()) {
+            String name;
+            double area;
+            int admin_level;
+            double population;
+            double density;
+            long parentID;
+            long ID;
+
             area = reader.getDouble("area");
-            density = reader.getDouble("density");
             name = reader.get("name");
+            admin_level = reader.getInt("admin_level");
+            population = reader.getDouble("population");
+            density = reader.getDouble("density");
+            parentID = reader.getLong("parent");
+            ID = reader.getLong("id");
 
-            AdminUnit adminUnit =  new AdminUnit(name, adminLevel, population, area, density);
-            units.add(adminUnit);
-            //System.out.printf(Locale.US,"%d %s %f\n",id, name, fare);
+
+            AdminUnit node = new AdminUnit(name, area, admin_level, population, density);
+            parentIdMap.put(parentID != -1 ? node : null, parentID);
+
+
+            selfIdMap.put(ID, node);
+            units.add(node);
         }
+        for(AdminUnit node : units){
+            AdminUnit parent = selfIdMap.get(parentIdMap.get(node));
+            node.setParent(parent);
+
+            if(parent != null){
+                parent.children.add(node);
+            }
+
+        }
+        for(AdminUnit node : units) {
+            node.fixMissingValues();
+        }
+
     }
 
     /**
@@ -72,17 +104,18 @@ public class AdminUnitList {
 
         for (AdminUnit unit : units) {
             String name = unit.getName();
-
+            if(regex){
+                if(name.matches(pattern)){
+                    ret.units.add(unit);
+                }
+            } else  {
+                if(name.contains(pattern)){
+                    ret.units.add(unit);
+                }
+            }
         }
-
         return ret;
     }
 
-    public static void main(String[] args) throws IOException {
-        AdminUnitList adminUnitList = new AdminUnitList();
-        adminUnitList.read("admin-units.csv");
-        for (AdminUnit u : adminUnitList.units) {
-            System.out.println(u.toString());
-        }
-    }
+
 }
