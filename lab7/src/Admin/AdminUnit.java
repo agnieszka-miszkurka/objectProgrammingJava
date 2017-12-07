@@ -30,7 +30,12 @@ public class AdminUnit {
     }
 
     private AdminUnit parent;
-    BoundingBox box = new BoundingBox();
+
+    public BoundingBox getBox() {
+        return box;
+    }
+
+    private BoundingBox box = new BoundingBox();
     List<AdminUnit> children = new ArrayList<>();
 
     AdminUnit(String name, double area, int admin_level, double population, double density) {

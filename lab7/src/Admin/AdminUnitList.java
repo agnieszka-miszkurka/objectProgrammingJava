@@ -42,14 +42,27 @@ public class AdminUnitList {
             parentID = reader.getLong("parent");
             ID = reader.getLong("id");
 
+            double x1 = reader.getDouble("x1");
+            double y1 = reader.getDouble("y1");
+            double x2 = reader.getDouble("x2");
+            double y2 =  reader.getDouble("y2");
+            double x3 = reader.getDouble("x3");
+            double y3 = reader.getDouble("y3");
+            double x4 = reader.getDouble("x4");
+            double y4 = reader.getDouble("y4");
 
             AdminUnit node = new AdminUnit(name, area, admin_level, population, density);
+
+            node.getBox().addPoint(x1,y1);
+            node.getBox().addPoint(x2,y2);
+            node.getBox().addPoint(x3,y3);
+            node.getBox().addPoint(x4,y4);
+
             parentIdMap.put(parentID != -1 ? node : null, parentID);
-
-
             selfIdMap.put(ID, node);
             units.add(node);
         }
+
         for(AdminUnit node : units){
             AdminUnit parent = selfIdMap.get(parentIdMap.get(node));
             node.setParent(parent);
