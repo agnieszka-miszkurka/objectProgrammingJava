@@ -68,7 +68,7 @@ public class AdminUnitList {
             node.setParent(parent);
 
             if(parent != null){
-                parent.children.add(node);
+                parent.getChildren().add(node);
             }
 
         }
@@ -128,6 +128,38 @@ public class AdminUnitList {
             }
         }
         return ret;
+    }
+
+    /**
+     * Zwraca listę jednostek sąsiadujących z jendostką unit na tym samym poziomie hierarchii admin_level.
+     * Czyli sąsiadami wojweództw są województwa, powiatów - powiaty, gmin - gminy, miejscowości - inne miejscowości
+     * @param unit - jednostka, której sąsiedzi mają być wyznaczeni
+     * @param maxdistance - parametr stosowany wyłącznie dla miejscowości, maksymalny promień odległości od środka unit,
+     *                    w którym mają sie znaleźć punkty środkowe BoundingBox sąsiadów
+     * @return lista wypełniona sąsiadami
+     */
+    AdminUnitList getNeighbors(AdminUnit unit, double maxdistance) throws EmptyBoundingBoxException {
+        AdminUnitList neighborsList = new AdminUnitList();
+        for(AdminUnit adminUnit : this.units){
+            if (adminUnit == unit)
+                continue;
+            if(adminUnit.getAdminLevel() == unit.getAdminLevel()){
+                if(unit.getAdminLevel() >= 8 ) {
+                    /*unit.getBox().addPoint(unit.getBox().xmax+maxdistance,unit.getBox().ymax+maxdistance );
+                    unit.getBox().addPoint(unit.getBox().xmin+maxdistance,unit.getBox().ymin+maxdistance );
+                    if(unit.getBox().intersects(adminUnit.getBox())){
+                        neighborsList.units.add(adminUnit);
+                    }*/
+                    if(unit.getBox().distanceTo(adminUnit.getBox()) < maxdistance)
+                        neighborsList.units.add(adminUnit);
+                } else {
+                    if (unit.getBox().intersects(adminUnit.getBox())){
+                        neighborsList.units.add(adminUnit);
+                    }
+                }
+            }
+        }
+        return neighborsList;
     }
 
 

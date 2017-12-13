@@ -5,6 +5,11 @@ import java.util.List;
 
 public class AdminUnit {
     private String name;
+
+    public int getAdminLevel() {
+        return adminLevel;
+    }
+
     private int adminLevel;
 
     public double getPopulation() {
@@ -36,7 +41,18 @@ public class AdminUnit {
     }
 
     private BoundingBox box = new BoundingBox();
-    List<AdminUnit> children = new ArrayList<>();
+
+    public List<AdminUnit> getChildren() {
+        return children;
+    }
+
+    private List<AdminUnit> children = new ArrayList<>();
+
+    public List<AdminUnit> getNeighbours() {
+        return neighbours;
+    }
+
+    List<AdminUnit> neighbours  = new ArrayList<>();
 
     AdminUnit(String name, double area, int admin_level, double population, double density) {
         this.name = name;
