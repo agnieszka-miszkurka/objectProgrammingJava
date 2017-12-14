@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 public class Main {
 
@@ -77,7 +78,7 @@ public class Main {
         int maxdistance=15;
 
         /////////czas wyszukiwania sasiadow w dwoch petlach
-        double t1 = System.nanoTime()/1e6;
+        /*double t1 = System.nanoTime()/1e6;
         // wywołanie funkcji
         for (AdminUnit adminUnit : a.getUnits()) {
             for (AdminUnit adminUnit1 : a.getUnits()) {
@@ -94,9 +95,9 @@ public class Main {
         }
         double t2 = System.nanoTime()/1e6;
         System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
-
+*/
         //////czas wyszukiwania sasiadow rTree
-        //towrze roota
+        //tworze roota
         AdminUnit Polska = new AdminUnit("Polska", 1000, 2, 30000000, 100);
         for (AdminUnit u : b.getUnits()) {
             if (u.getAdminLevel()==4)
@@ -107,6 +108,16 @@ public class Main {
         rTreeSearch(Polska, maxdistance);
         double t22 = System.nanoTime()/1e6;
         System.out.printf(Locale.US,"t2-t1=%f\n",t22-t11);
+
+
+        //lab 9
+        a.filter(p->p.getName().startsWith("K")).sortInplaceByArea().list(out);
+        out.println();
+        a.filter(p-> p.getAdminLevel() == 6 && p.getParent().getName().contains("województwo małopolskie")).list(out);
+        out.println();
+
+        a.filter((p->true)).sortInplaceByArea().list(out);
+        out.println();
 
     }
 }
