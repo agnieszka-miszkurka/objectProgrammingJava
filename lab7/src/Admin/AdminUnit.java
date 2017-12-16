@@ -98,4 +98,5 @@ public class AdminUnit {
             this.population = this.getArea()*this.getDensity();
         }
     }
+
 }

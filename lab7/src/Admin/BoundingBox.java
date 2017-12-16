@@ -67,29 +67,35 @@ public class BoundingBox {
         return false;
     }
 
-    boolean intersectsWithMaxDistance(BoundingBox bb, int maxdistance){
+    boolean intersectsWithMaxDistance(BoundingBox bb, double maxdistance){
         //przy szukaniu sasiadow w 2 petlach chcemy unikac sytuacji w ktorej
         // do jendej wsi dodamy maxdostance a potem do drugiej i porownujac czy
         //sa sasiadami bedziemy mieli odleglosc od nich 2 razy maxdistance
-        xmax = xmax + maxdistance;
-        ymax = ymax + maxdistance;
-        ymin = ymin - maxdistance;
-        xmin = xmin - maxdistance;
-        if  (contains(bb.xmax , bb.ymin) || contains(bb.xmax, bb.ymax) || contains(bb.xmin, bb.ymin) || contains(bb.xmin, bb.ymax)){
-            //teraz sprawdzam czy co najmnije 1 jest poza
-            if(!contains(bb.xmax, bb.ymin) || !contains(bb.xmax, bb.ymax) || !contains(bb.xmin, bb.ymin) || !contains(bb.xmin, bb.ymax)){
-                xmax = xmax - maxdistance;
-                ymax = ymax - maxdistance;
-                ymin = ymin + maxdistance;
-                xmin = xmin + maxdistance;
-                return true;
-            }
+        double distance = maxdistance/111;
+        xmax = xmax + distance;
+        ymax = ymax + distance;
+        ymin = ymin - distance;
+        xmin = xmin - distance;
+        if  (intersects(bb) || contains(bb) || bb.contains(this)){
+            xmax = xmax - distance;
+            ymax = ymax - distance;
+            ymin = ymin + distance;
+            xmin = xmin + distance;
+            return true;
         }
-        xmax = xmax - maxdistance;
-        ymax = ymax - maxdistance;
-        ymin = ymin + maxdistance;
-        xmin = xmin + maxdistance;
+        xmax = xmax - distance;
+        ymax = ymax - distance;
+        ymin = ymin + distance;
+        xmin = xmin + distance;
         return false;
+    }
+
+    void extend(int distance){
+        distance = distance/111;
+        xmax = xmax + distance;
+        ymax = ymax + distance;
+        ymin = ymin - distance;
+        xmin = xmin - distance;
     }
     /**
      * Powiększa rozmiary tak, aby zawierał bb oraz poprzednią wersję this

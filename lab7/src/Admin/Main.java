@@ -9,7 +9,7 @@ import java.util.Locale;
 public class Main {
 
 
-    static void rTreeSearch(AdminUnit root, int maxdistance){
+    /*static void rTreeSearch(AdminUnit root, int maxdistance){
         //jesli ma dzieci
         if (!root.getChildren().isEmpty()) {
             for (int i=0; i<root.getChildren().size(); i++) {
@@ -32,9 +32,11 @@ public class Main {
                 }
             }
         }
-    }
+    }*/
 
-    public static void main(String[] args) {
+
+
+    public static void main(String[] args) throws EmptyBoundingBoxException {
         AdminUnitList a = new AdminUnitList();
         try {
             a.read("admin-units.csv");
@@ -55,8 +57,8 @@ public class Main {
 
         out.println();
 
-        AdminUnitList o = a.selectByName("gmina Wielka Wie", false);
-        AdminUnitList o1 = a.selectByName("Wronin", false);
+        AdminUnitList o = a.selectByName("województwo śląskie", false);
+        AdminUnitList o1 = a.selectByName("Szyce", false);
 
 
         System.out.println(o.getUnits().get(0).getBox().boxOnMapString());
@@ -73,39 +75,34 @@ public class Main {
             e.printStackTrace();
         }
 
+        System.out.println("bbbbbbbbbbbbbb");
+
 
         int maxdistance=15;
 
         /////////czas wyszukiwania sasiadow w dwoch petlach
-        double t1 = System.nanoTime()/1e6;
+       double t1 = System.nanoTime()/1e6;
         // wywołanie funkcji
-        for (AdminUnit adminUnit : a.getUnits()) {
-            for (AdminUnit adminUnit1 : a.getUnits()) {
-                if(adminUnit1.getAdminLevel() >= 8 ) {
-                    if (adminUnit.getBox().intersectsWithMaxDistance(adminUnit1.getBox(), maxdistance)){
-                        adminUnit.neighbours.add(adminUnit1);
-                        adminUnit1.neighbours.add(adminUnit);
-                    }
-                } else if (adminUnit != adminUnit1 && adminUnit.getBox().intersects(adminUnit1.getBox())) {
-                    adminUnit.neighbours.add(adminUnit1);
-                    adminUnit1.neighbours.add(adminUnit);
-                }
-            }
-        }
+        b.getNeighbors(modlniczka, maxdistance);
         double t2 = System.nanoTime()/1e6;
         System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
 
         //////czas wyszukiwania sasiadow rTree
         //towrze roota
         AdminUnit Polska = new AdminUnit("Polska", 1000, 2, 30000000, 100);
-        for (AdminUnit u : b.getUnits()) {
-            if (u.getAdminLevel()==4)
+        for (AdminUnit u : a.getUnits()) {
+            if (u.getAdminLevel()==4) {
+                u.setParent(Polska);
                 Polska.getChildren().add(u);
+            }
         }
         double t11 = System.nanoTime()/1e6;
         // wywołanie funkcji
-        rTreeSearch(Polska, maxdistance);
+        a.rTreeSearch(2, modlniczka);
         double t22 = System.nanoTime()/1e6;
+        for(AdminUnit n : modlniczka.neighbours) {
+            System.out.println(n.toString());
+        }
         System.out.printf(Locale.US,"t2-t1=%f\n",t22-t11);
 
     }

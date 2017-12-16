@@ -145,11 +145,6 @@ public class AdminUnitList {
                 continue;
             if(adminUnit.getAdminLevel() == unit.getAdminLevel()){
                 if(unit.getAdminLevel() >= 8 ) {
-                    /*unit.getBox().addPoint(unit.getBox().xmax+maxdistance,unit.getBox().ymax+maxdistance );
-                    unit.getBox().addPoint(unit.getBox().xmin+maxdistance,unit.getBox().ymin+maxdistance );
-                    if(unit.getBox().intersects(adminUnit.getBox())){
-                        neighborsList.units.add(adminUnit);
-                    }*/
                     if(unit.getBox().distanceTo(adminUnit.getBox()) < maxdistance)
                         neighborsList.units.add(adminUnit);
                 } else {
@@ -162,5 +157,31 @@ public class AdminUnitList {
         return neighborsList;
     }
 
+    void rTreeSearch(double maxdistance, AdminUnit adminUnit){
+        if (adminUnit.getParent() == null){
+            return;
+        }
+        rTreeSearch(maxdistance, adminUnit.getParent());
+
+        for (AdminUnit sibling : adminUnit.getParent().getChildren()){
+            if (adminUnit.getAdminLevel()>=8) {
+                if (adminUnit.getBox().intersectsWithMaxDistance(sibling.getBox(),maxdistance)){
+                    adminUnit.neighbours.add(sibling);
+                }
+            } else if (adminUnit.getAdminLevel() < 8 && adminUnit.getBox().intersects(sibling.getBox())){
+                adminUnit.neighbours.add(sibling);
+            }
+        }
+
+        for (AdminUnit parentNeighbour : adminUnit.getParent().neighbours){
+            for (AdminUnit sibling : parentNeighbour.getChildren()){
+                if (adminUnit.getAdminLevel()>=8 && adminUnit.getBox().intersectsWithMaxDistance(sibling.getBox(),maxdistance)){
+                    adminUnit.neighbours.add(sibling);
+                } else if (adminUnit.getAdminLevel() < 8 && adminUnit.getBox().intersects(sibling.getBox())){
+                    adminUnit.neighbours.add(sibling);
+                }
+            }
+        }
+    }
 
 }
