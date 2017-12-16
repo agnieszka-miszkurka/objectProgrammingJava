@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Predicate;
 
 public class Main {
 
@@ -75,8 +76,6 @@ public class Main {
             e.printStackTrace();
         }
 
-        System.out.println("bbbbbbbbbbbbbb");
-
 
         int maxdistance=15;
 
@@ -104,6 +103,16 @@ public class Main {
             System.out.println(n.toString());
         }
         System.out.printf(Locale.US,"t2-t1=%f\n",t22-t11);
+
+
+        //lab 9
+        a.filter(p->p.getName().startsWith("K")).sortInplaceByArea().list(out);
+        out.println();
+        a.filter(p-> p.getAdminLevel() == 6 && p.getParent().getName().contains("województwo małopolskie")).list(out);
+        out.println();
+
+        a.filter((p->true)).sortInplaceByArea().list(out);
+        out.println();
 
     }
 }
