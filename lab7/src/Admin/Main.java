@@ -2,10 +2,7 @@ package Admin;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.function.Predicate;
 
 public class Main {
 
@@ -36,7 +33,6 @@ public class Main {
     }*/
 
 
-
     public static void main(String[] args) throws EmptyBoundingBoxException {
         AdminUnitList a = new AdminUnitList();
         try {
@@ -54,7 +50,7 @@ public class Main {
 
         PrintStream out = new PrintStream(System.out);
 
-        a.list(out,1,1);
+        a.list(out, 1, 1);
 
         out.println();
 
@@ -68,8 +64,8 @@ public class Main {
         AdminUnit modlnica = o1.getUnits().get(0);
 
         try {
-            AdminUnitList somsiedzi = a.getNeighbors(modlniczka,5);
-            for (AdminUnit u : somsiedzi.getUnits()){
+            AdminUnitList somsiedzi = a.getNeighbors(modlniczka, 5);
+            for (AdminUnit u : somsiedzi.getUnits()) {
                 System.out.println(u.toString());
             }
         } catch (EmptyBoundingBoxException e) {
@@ -77,42 +73,55 @@ public class Main {
         }
 
 
-        int maxdistance=15;
+        int maxdistance = 15;
 
         /////////czas wyszukiwania sasiadow w dwoch petlach
-       double t1 = System.nanoTime()/1e6;
+        double t1 = System.nanoTime() / 1e6;
         // wywołanie funkcji
         b.getNeighbors(modlniczka, maxdistance);
-        double t2 = System.nanoTime()/1e6;
-        System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
+        double t2 = System.nanoTime() / 1e6;
+        System.out.printf(Locale.US, "t2-t1=%f\n", t2 - t1);
 
         //////czas wyszukiwania sasiadow rTree
         //towrze roota
         AdminUnit Polska = new AdminUnit("Polska", 1000, 2, 30000000, 100);
         for (AdminUnit u : a.getUnits()) {
-            if (u.getAdminLevel()==4) {
+            if (u.getAdminLevel() == 4) {
                 u.setParent(Polska);
                 Polska.getChildren().add(u);
             }
         }
-        double t11 = System.nanoTime()/1e6;
+        double t11 = System.nanoTime() / 1e6;
         // wywołanie funkcji
         a.rTreeSearch(2, modlniczka);
-        double t22 = System.nanoTime()/1e6;
-        for(AdminUnit n : modlniczka.neighbours) {
+        double t22 = System.nanoTime() / 1e6;
+        for (AdminUnit n : modlniczka.neighbours) {
             System.out.println(n.toString());
         }
-        System.out.printf(Locale.US,"t2-t1=%f\n",t22-t11);
+        System.out.printf(Locale.US, "t2-t1=%f\n", t22 - t11);
 
 
         //lab 9
-        a.filter(p->p.getName().startsWith("K")).sortInplaceByArea().list(out);
+        //a.filter(p->p.getName().startsWith("K")).sortInplaceByArea().list(out);
+        //out.println();
+        System.out.println("$$$$$$$$$$$$$$$$$$$$4");
+        a.filter(p -> p.getAdminLevel() == 6 && p.getParent().getName().contains("województwo małopolskie"), 3).list(out);
         out.println();
-        a.filter(p-> p.getAdminLevel() == 6 && p.getParent().getName().contains("województwo małopolskie")).list(out);
+        a.filter(p -> p.getAdminLevel() == 6 && p.getParent().getName().contains("województwo małopolskie"), 1, 2).list(out);
         out.println();
 
-        a.filter((p->true)).sortInplaceByArea().list(out);
-        out.println();
+        //a.filter((p->true)).sortInplaceByArea().list(out);
+        //out.println();
+
+        AdminUnitList list = a;
+
+        AdminUnitQuery query = new AdminUnitQuery()
+                .selectFrom(list)
+                .where(el -> el.getParent().getName().contains("Wielka Wie"))
+                .or(el -> el.getName().contains("Krak"))
+                .sort((el1, el2) -> (el1.getName().compareTo(el2.getName())))
+                .limit(20);
+        query.execute().list(out);
 
     }
 }
