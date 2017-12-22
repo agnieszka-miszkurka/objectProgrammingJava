@@ -8,6 +8,7 @@ import java.util.List;
 
 import static java.awt.BasicStroke.CAP_ROUND;
 import static java.awt.BasicStroke.JOIN_MITER;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class DrawPanel extends JPanel {
 
@@ -27,29 +28,35 @@ public class DrawPanel extends JPanel {
     public void AddBranches() {
         double s=0.3;
         for (int i=-100; i<300 ; i = i+50, s+=0.1) {
-            Branch branch = new Branch((int) (20 + s*-242),i, s,1);
+            Branch branch = new Branch(-i,i+200, s,1);
             shapes.add(branch);
-            Branch branch2 = new Branch((int) (20 + s*332),i, -1*s,1);
+            Branch branch2 = new Branch(i+500,i+200, -1*s,1);
             shapes.add(branch2);
         }
+    }
+
+    private void addBubbles() {
+        int numberOfBubles = 15;
+        double scale = 0.2;
+        for (int i=0; i<numberOfBubles; i++) {
+            //color
+            int r = ThreadLocalRandom.current().nextInt(0, 255 + 1);
+            int g = ThreadLocalRandom.current().nextInt(0, 255 + 1);
+            int b = ThreadLocalRandom.current().nextInt(0, 255 + 1);
+            Color color = new Color(r,g,b);
+            int x = ThreadLocalRandom.current().nextInt(150, 300 + 1);
+            int y = ThreadLocalRandom.current().nextInt(170, 550 + 1);
+            Bubble bubble = new Bubble(color,color.darker(),x,y,scale);
+            shapes.add(bubble);
+        }
+
     }
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2d= (Graphics2D)g;
         AddBranches();
-        Bubble bubble1 = new Bubble();
-        bubble1.setColors(Color.BLUE, Color.PINK);
-        //bubble1.render(g2d);
-
-        Bubble bubble2 = new Bubble();
-        bubble2.setColors(Color.MAGENTA, Color.MAGENTA);
-        bubble2.setPosition(150,150);
-        bubble2.scale = 1;
-        bubble2.transform(g2d);
-        //bubble2.render(g2d);
-        shapes.add(bubble1);
-        shapes.add(bubble2);
+       addBubbles();
 
 
         for(XmasShape s:shapes){

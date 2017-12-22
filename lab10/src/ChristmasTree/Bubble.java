@@ -18,7 +18,7 @@ public class Bubble implements XmasShape {
             fillColor = Color.PINK;
         }
 
-        public Bubble(Color line, Color fill, int x, int y, int scale) {
+        public Bubble(Color line, Color fill, int x, int y, double scale) {
             lineColor = line;
             fillColor = fill;
             this.x = x;
