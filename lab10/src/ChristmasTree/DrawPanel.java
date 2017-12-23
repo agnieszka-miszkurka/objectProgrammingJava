@@ -36,27 +36,84 @@ public class DrawPanel extends JPanel {
     }
 
     private void addBubbles() {
-        int numberOfBubles = 15;
+        int numberOfBubles = 25;
         double scale = 0.2;
         for (int i=0; i<numberOfBubles; i++) {
             //color
             int r = ThreadLocalRandom.current().nextInt(0, 255 + 1);
             int g = ThreadLocalRandom.current().nextInt(0, 255 + 1);
             int b = ThreadLocalRandom.current().nextInt(0, 255 + 1);
-            Color color = new Color(r,g,b);
-            int x = ThreadLocalRandom.current().nextInt(150, 300 + 1);
-            int y = ThreadLocalRandom.current().nextInt(170, 550 + 1);
+            int x =100;
+            Color color = new Color(r, g, b);
+            int y = ThreadLocalRandom.current().nextInt(120, 550 + 1);
+            if (y<150){
+                x = ThreadLocalRandom.current().nextInt(220, 260 + 1);
+            }else if (y<200){
+                x = ThreadLocalRandom.current().nextInt(180, 290 + 1);
+            }else if (y<300) {
+                x = ThreadLocalRandom.current().nextInt(150, 330 + 1);
+            } else if (y<400) {
+                 x = ThreadLocalRandom.current().nextInt(100, 380 + 1);
+            } else{
+                 x = ThreadLocalRandom.current().nextInt(80, 400 + 1);
+            }
             Bubble bubble = new Bubble(color,color.darker(),x,y,scale);
             shapes.add(bubble);
         }
 
     }
 
+    private void addTrunk(){
+        Trunk trunk = new Trunk(220,500,1);
+        shapes.add(trunk);
+    }
+
+    private void addLights() {
+
+        int x = 10, x1=10;
+        for (int i=140; i<=500; i=i+100) {
+            if (i<150){
+                x = ThreadLocalRandom.current().nextInt(220, 260 + 1);
+                x1 = ThreadLocalRandom.current().nextInt(220, 260 + 1);
+            }else if (i<200){
+                x = ThreadLocalRandom.current().nextInt(180, 290 + 1);
+                x1 = ThreadLocalRandom.current().nextInt(180, 290 + 1);
+            }else if (i<300) {
+                x = ThreadLocalRandom.current().nextInt(150, 330 + 1);
+                x1 = ThreadLocalRandom.current().nextInt(150, 330 + 1);
+            } else if (i<400) {
+                x = ThreadLocalRandom.current().nextInt(100, 380 + 1);
+                x1 = ThreadLocalRandom.current().nextInt(100, 380 + 1);
+            } else{
+                x = ThreadLocalRandom.current().nextInt(80, 400 + 1);
+                x1 = ThreadLocalRandom.current().nextInt(80, 400 + 1);
+            }
+            Light light = new Light(x,i,1);
+            Light light2 = new Light(x1,i,1);
+            shapes.add(light);
+            shapes.add(light2);
+        }
+    }
+    private void addStar() {
+        Star star = new Star(250,70,1);
+        shapes.add(star);
+    }
+
+    private void addWishes() {
+        Wishes wishes = new Wishes(500,350,0.7,"Happy new year!");
+        shapes.add(wishes);
+    }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2d= (Graphics2D)g;
+        addWishes();
+        addTrunk();
         AddBranches();
-       addBubbles();
+        addBubbles();
+        addLights();
+        addStar();
+
 
 
         for(XmasShape s:shapes){
