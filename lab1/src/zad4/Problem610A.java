@@ -21,6 +21,7 @@ public class Problem610A {
             counter--;
 
         System.out.println(counter);
+
     }
 
 }

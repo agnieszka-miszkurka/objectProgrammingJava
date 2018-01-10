@@ -6,8 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Locale;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DownloadExample {
+
+    static AtomicInteger count = new AtomicInteger(0);
+    static Semaphore sem = new Semaphore(0);
+    static double t1 = 0;
+    static double t2 = 0;
 
     // lista plików do pobrania
     static String [] toDownload = {
@@ -51,6 +58,8 @@ public class DownloadExample {
                 e.printStackTrace();
             }
             System.out.println("Done:"+fileName);
+            count.incrementAndGet();
+            sem.release();
         }
 
 
@@ -63,23 +72,66 @@ public class DownloadExample {
             new Downloader(url).run();
         }
         double t2 = System.nanoTime()/1e6;
-        System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
+        System.out.printf(Locale.US,"sequential time: t2-t1=%f\n",t2-t1);
     }
 
 
     static void concurrentDownload(){
-        double t1 = System.nanoTime()/1e6;
+        t1 = System.nanoTime()/1e6;
         for(String url:toDownload){
             // uruchom Downloader jako wątek...
-            new Downloader(url).run();
+            (new Thread(new Downloader(url))).start();
+
         }
-        double t2 = System.nanoTime()/1e6;
-        System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
+        //double t2 = System.nanoTime()/1e6;
+        //System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
     }
+
+    static void concurrentDownload2(){
+        while(count.get()!=(toDownload.length)){
+            // wait...
+           // System.out.println(count.get());
+            Thread.yield();
+        }
+        t2 = System.nanoTime()/1e6;
+        System.out.printf(Locale.US,"concurrent1: t2-t1=%f\n",t2-t1);
+        t1 = System.nanoTime()/1e6;
+        for(String url:toDownload){
+            // uruchom Downloader jako wątek...
+            (new Thread(new Downloader(url))).start();
+
+        }
+        //double t2 = System.nanoTime()/1e6;
+        //System.out.printf(Locale.US,"t2-t1=%f\n",t2-t1);
+    }
+
+    static void concurrentDownload3() throws InterruptedException {
+        sem.acquire(count.get()+2*toDownload.length);  // bo count ma warotsc bez thredow jeszcze
+        t2 = System.nanoTime()/1e6;
+        //System.out.printf(Locale.US,"concurrent2: t2-t1=%f\n",t2-t1);
+        t1 = System.nanoTime()/1e6;
+        for(String url:toDownload){
+            // uruchom Downloader jako wątek...
+            (new Thread(new Downloader(url))).start();
+        }
+        //czas concurrentDwonload3:
+        System.out.println(count.get());
+        sem.acquire(toDownload.length);
+        t2 = System.nanoTime()/1e6;
+        System.out.printf(Locale.US,"concurrent3: t2-t1=%f\n",t2-t1);
+    }
+
 
     public static void main(String[] args) {
         DownloadExample.sequentialDownload();
+        count.set(0);
         DownloadExample.concurrentDownload();
+        DownloadExample.concurrentDownload2();
+        try {
+            DownloadExample.concurrentDownload3();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
