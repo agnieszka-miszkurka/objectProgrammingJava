@@ -1,9 +1,12 @@
 package mean;
 
 import java.util.Locale;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class Mean {
     static double[] array;
+    static BlockingQueue<Double> results = new ArrayBlockingQueue<Double>(128);
     static void initArray(int size){
         array = new double[size];
         for(int i=0;i<size;i++){
@@ -34,19 +37,30 @@ public class Mean {
         double t2 = System.nanoTime()/1e6;
         // czekaj na ich zakończenie używając metody ''join''
 
-        for(MeanCalc mc:threads) {
+        /*for(MeanCalc mc:threads) {
             try {
                 mc.join();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+
         // oblicz średnią ze średnich
-        double mean = 0;
+        double mean=0;
+        for (int i=0; i<cnt; i++) {
+            try {
+                mean += results.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        mean = mean/cnt;
+
+        /*double mean = 0;
         for (MeanCalc mc : threads){
             mean += mc.mean;
         }
-        mean = mean/cnt;
+        mean = mean/cnt;*/
         double t3 = System.nanoTime()/1e6;
         System.out.printf(Locale.US,"size = %d cnt=%d >  t2-t1=%f t3-t1=%f mean=%f\n",
                 array.length,
@@ -57,10 +71,14 @@ public class Mean {
     }
 
     public static void main(String[] args) {
-        initArray(100000000);
+        /*initArray(100000000);
         MeanCalc meanCalc = new MeanCalc(0,2);
         meanCalc.start();
-        parallelMean(10);
+        parallelMean(10);*/
+        initArray(128000000);
+        for(int cnt:new int[]{1,2,4,8,16,32,64,128}){
+            parallelMean(cnt);
+        }
     }
 
     static class MeanCalc extends Thread{
@@ -77,7 +95,12 @@ public class Mean {
             for (int i=start; i<end; i++)
                 mean += array[i];
             mean=mean/(end-start);
-            System.out.printf(Locale.US,"%d-%d mean=%f\n",start,end,mean);
+            try {
+                results.put(mean);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //System.out.printf(Locale.US,"%d-%d mean=%f\n",start,end,mean);
         }
     }
 
