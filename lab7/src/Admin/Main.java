@@ -54,7 +54,8 @@ public class Main {
 
         out.println();
 
-        AdminUnitList o = a.selectByName("województwo śląskie", false);
+        AdminUnitList o = a.selectByName("Murownia", false);
+        System.out.println(o.getUnits().get(0).getParent());
         AdminUnitList o1 = a.selectByName("Szyce", false);
 
 
