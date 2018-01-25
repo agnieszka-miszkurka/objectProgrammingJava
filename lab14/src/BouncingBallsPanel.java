@@ -30,7 +30,7 @@ public class BouncingBallsPanel extends JPanel {
         }
 
         void detectColision(Ball b) {
-            if(b.x<0)
+          //  if(b.x<0)
 
         }
 
@@ -41,9 +41,6 @@ public class BouncingBallsPanel extends JPanel {
                     b.x += b.vx;
                     b.y += b.vy;
                     //wykonaj odbicia od ściany
-                    if (b.x==700 || b.y==700 || b.x==0 )
-
-
                 }
 
 

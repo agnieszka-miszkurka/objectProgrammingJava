@@ -54,7 +54,7 @@ public class Main {
 
         out.println();
 
-        AdminUnitList o = a.selectByName("Murownia", false);
+        AdminUnitList o = a.selectByName("Modlniczka", false);
         System.out.println(o.getUnits().get(0).getParent());
         AdminUnitList o1 = a.selectByName("Szyce", false);
 

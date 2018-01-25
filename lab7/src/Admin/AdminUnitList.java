@@ -167,8 +167,11 @@ public class AdminUnitList {
         rTreeSearch(maxdistance, adminUnit.getParent());
 
         for (AdminUnit sibling : adminUnit.getParent().getChildren()){
+            if (adminUnit == sibling)
+                continue;
             if (adminUnit.getAdminLevel()>=8) {
                 if (adminUnit.getBox().intersectsWithMaxDistance(sibling.getBox(),maxdistance)){
+
                     adminUnit.neighbours.add(sibling);
                 }
             } else if (adminUnit.getAdminLevel() < 8 && adminUnit.getBox().intersects(sibling.getBox())){
@@ -178,6 +181,9 @@ public class AdminUnitList {
 
         for (AdminUnit parentNeighbour : adminUnit.getParent().neighbours){
             for (AdminUnit sibling : parentNeighbour.getChildren()){
+                if (adminUnit == sibling)
+                    continue;
+
                 if (adminUnit.getAdminLevel()>=8 && adminUnit.getBox().intersectsWithMaxDistance(sibling.getBox(),maxdistance)){
                     adminUnit.neighbours.add(sibling);
                 } else if (adminUnit.getAdminLevel() < 8 && adminUnit.getBox().intersects(sibling.getBox())){
